@@ -1,0 +1,16 @@
+runtime: ruby
+env: flex
+entrypoint: bundle exec rackup --port $PORT
+
+env_variables:
+  GOOGLE_CLOUD_STORAGE_BUCKET: feeds-stable-reactor-209402
+
+beta_settings:
+  cloud_sql_instances: stable-reactor-209402:us-central1:courier-feeds
+
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1
+  memory_gb: 0.5
+  disk_size_gb: 10
