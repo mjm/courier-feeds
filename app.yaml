@@ -2,6 +2,7 @@ runtime: ruby
 env: flex
 entrypoint: bundle exec rackup --port $PORT
 
+service: feeds
 env_variables:
   GOOGLE_CLOUD_STORAGE_BUCKET: feeds-stable-reactor-209402
 
