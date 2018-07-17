@@ -4,9 +4,11 @@ rvm:
 - 2.5.1
 cache: bundler
 before_install:
-- openssl aes-256-cbc -K $encrypted_e24b690838e6_key -iv $encrypted_e24b690838e6_iv
-  -in service-account.json.enc -out service-account.json -d
 - gem install bundler -v 1.16.1
-deploy:
-  provider: gae
-  project: stable-reactor-209402
+before_script:
+- psql -c 'create database courier_feeds_test;' -U postgres
+- DB_URL="postgres:///courier_feeds_test" bundle exec rake db:migrate
+services:
+- postgresql
+addons:
+  postgresql: '9.6'
