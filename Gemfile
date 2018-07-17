@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.5.1'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
@@ -18,8 +19,4 @@ end
 group :test do
   gem 'rack-test'
   gem 'rspec', '~> 3.0'
-end
-
-group :production do
-  gem 'google-cloud-storage'
 end
