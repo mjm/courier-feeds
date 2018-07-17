@@ -3,6 +3,7 @@ require 'rack/test'
 require 'base64'
 
 ENV['RACK_ENV'] = 'test'
+ENV['DATABASE_URL'] = 'postgres:///courier_feeds_test'
 ENV['JWT_SECRET'] = Base64.encode64(Random.new.bytes(32))
 ENV['SESSION_SECRET'] = 'super secret'
 
