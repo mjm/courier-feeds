@@ -8,9 +8,11 @@ gem 'jwt'
 gem 'pg'
 gem 'puma'
 gem 'rack'
+gem 'rack-parser'
 gem 'rake', '~> 10.0'
 gem 'sequel'
 gem 'sinatra'
+gem 'sinatra-contrib'
 
 group :development do
   gem 'pry'
