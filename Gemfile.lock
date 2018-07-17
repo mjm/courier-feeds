@@ -36,6 +36,7 @@ GEM
     rack-test (1.0.0)
       rack (>= 1.0, < 3)
     rake (10.5.0)
+    rdiscount (2.2.0.1)
     rspec (3.7.0)
       rspec-core (~> 3.7.0)
       rspec-expectations (~> 3.7.0)
@@ -81,6 +82,7 @@ DEPENDENCIES
   rack-parser
   rack-test
   rake (~> 10.0)
+  rdiscount
   rspec (~> 3.0)
   sequel
   sinatra
