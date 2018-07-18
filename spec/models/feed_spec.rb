@@ -24,7 +24,7 @@ RSpec.describe Feed do
       let!(:existing) { Feed.register(attrs) }
 
       it 'does not create a new feed' do
-        expect { subject }.not_to change { Feed.count }
+        expect { subject }.not_to(change { Feed.count })
       end
 
       it 'returns the existing feed' do
