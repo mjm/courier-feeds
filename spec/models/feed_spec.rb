@@ -21,8 +21,7 @@ RSpec.describe Feed do
     end
 
     context 'when the feed has been registered before' do
-      let(:existing) { Feed.register(attrs) }
-      before { existing }
+      let!(:existing) { Feed.register(attrs) }
 
       it 'does not create a new feed' do
         expect { subject }.not_to change { Feed.count }
