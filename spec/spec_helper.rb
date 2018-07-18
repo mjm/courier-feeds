@@ -21,6 +21,12 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  config.around(:each) do |example|
+    DB.transaction(rollback: :always, auto_savepoint: true) do
+      example.run
+    end
+  end
 end
 
 module ControllerSpec

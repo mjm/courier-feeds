@@ -5,6 +5,6 @@ class FeedsController < ApplicationController
   use Rack::Parser
 
   get '/feeds' do
-    json []
+    json Feed.all
   end
 end
