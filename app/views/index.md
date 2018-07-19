@@ -11,3 +11,12 @@ Courier Feeds currently only supports JSON Feed.
 
 Lists all of the feeds the the service is tracking.
 Returns a JSON array with information about all tracked feeds.
+
+### GET `/users/:user_id/feeds`
+
+Lists the feeds registered to a particular user.
+Returns a JSON array in the same format as `/feeds`.
+
+> **Note**: `courier-feeds` does not track information about users.
+> Users are referenced by their ID exclusively.
+> You can potentially register feeds for users that do not actually exist.
