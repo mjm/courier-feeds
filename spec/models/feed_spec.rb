@@ -32,4 +32,50 @@ RSpec.describe Feed do
       end
     end
   end
+
+  describe 'adding a user to a feed' do
+    let(:feed) { Feed.register(url: 'https://example.com/feed.json') }
+    subject { feed.add_user_id(123) }
+
+    context 'when the user does not already have the feed registered' do
+      it 'creates a new user feed' do
+        expect { subject }.to change { feed.user_feeds_dataset.count }.by 1
+      end
+
+      it 'returns the created user feed' do
+        expect(subject).to be_a(UserFeed)
+        expect(subject.feed_id).to eq feed.id
+      end
+    end
+
+    context 'when the user has already registered the feed' do
+      before { feed.add_user_id(123) }
+
+      it 'raises an error' do
+        expect { subject }.to raise_error(Sequel::UniqueConstraintViolation)
+      end
+    end
+  end
+
+  describe 'querying the user ids of a feed' do
+    let(:feed) { Feed.register(url: 'https://example.com/feed.json') }
+    subject { feed.user_ids }
+
+    context 'when the feed has no users' do
+      it 'returns an empty array' do
+        expect(subject).to eq []
+      end
+    end
+
+    context 'when the feed has registered users' do
+      before do
+        feed.add_user_id(456)
+        feed.add_user_id(123)
+      end
+
+      it 'returns an array with the user ids' do
+        expect(subject).to eq [123, 456]
+      end
+    end
+  end
 end
