@@ -78,4 +78,40 @@ RSpec.describe Feed do
       end
     end
   end
+
+  describe 'querying feeds by user id' do
+    subject { Feed.by_user(123) }
+
+    context 'when there are no feeds registered' do
+      it { is_expected.to be_empty }
+    end
+
+    context 'when there are no feeds registered by that user' do
+      let(:feed) { Feed.register(url: 'https://example.com/feed.json') }
+      before { feed.add_user_id(456) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'when there are feeds registered by that user' do
+      let(:feed1) { Feed.register(url: 'https://example.com/feed.json') }
+      let(:feed2) { Feed.register(url: 'https://example2.com/feed.json') }
+      let(:feed3) { Feed.register(url: 'https://example3.com/feed.json') }
+      before do
+        feed1.add_user_id(123)
+        feed1.add_user_id(456)
+        feed2.add_user_id(123)
+        feed3.add_user_id(456)
+      end
+
+      it 'returns the feeds for that user' do
+        expect(subject.all).to eq [feed1, feed2]
+      end
+
+      it 'can be combined with other dataset filters' do
+        dataset = Feed.where(Sequel[:url].like('%2.com%')).by_user(123)
+        expect(dataset.all).to eq [feed2]
+      end
+    end
+  end
 end
