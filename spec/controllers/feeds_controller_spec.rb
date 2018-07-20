@@ -3,6 +3,12 @@ RSpec.describe FeedsController do
 
   describe 'GET /feeds' do
     let(:parsed_feeds) { JSON.parse(last_response.body) }
+
+    it 'is documented on the index page' do
+      get '/'
+      expect(last_response.body).to include 'GET <code>/feeds</code>'
+    end
+
     context 'when there are no feeds' do
       it 'returns an empty JSON array' do
         get '/feeds'
@@ -40,6 +46,11 @@ RSpec.describe FeedsController do
 
   describe 'GET /users/:user_id/feeds' do
     let(:parsed_feeds) { JSON.parse(last_response.body) }
+
+    it 'is documented on the index page' do
+      get '/'
+      expect(last_response.body).to include 'GET <code>/users/:user_id/feeds'
+    end
 
     context 'when the user has no feeds' do
       before { Feed.register(url: 'https://example.com/feed.json') }
