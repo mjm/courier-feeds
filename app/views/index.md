@@ -17,6 +17,12 @@ Returns a JSON array with information about all tracked feeds.
 Lists the feeds registered to a particular user.
 Returns a JSON array in the same format as `/feeds`.
 
+### POST `/users/:user_id/feeds`
+
+Registers a new feed on behalf of a user.
+Returns a JSON object describing the registered feed.
+Returns a `400 Bad Request` response if the user has already registered a feed with the same URL.
+
 > **Note**: `courier-feeds` does not track information about users.
 > Users are referenced by their ID exclusively.
 > You can potentially register feeds for users that do not actually exist.

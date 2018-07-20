@@ -31,6 +31,19 @@ RSpec.describe Feed do
         expect(subject).to eq existing
       end
     end
+
+    context 'when a user id is provided' do
+      let(:attrs) { { url: 'https://example.com/feed.json', user_id: 123 } }
+      subject { Feed.register(attrs) }
+
+      it 'creates new feed' do
+        expect { subject }.to change { Feed.count }.by 1
+      end
+
+      it 'registers the feed for the given user' do
+        expect(subject.user_ids).to eq [123]
+      end
+    end
   end
 
   describe 'adding a user to a feed' do

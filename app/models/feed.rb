@@ -20,6 +20,10 @@ class Feed < Sequel::Model(DB[:feeds])
   end
 
   def self.register(attrs)
-    find_or_create(attrs)
+    attrs = attrs.transform_keys(&:to_sym)
+    user_id = attrs.delete(:user_id)
+    feed = find_or_create(attrs)
+    feed.add_user_id(user_id) if user_id
+    feed
   end
 end
