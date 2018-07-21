@@ -3,6 +3,8 @@ require 'pathname'
 RACK_ENV = (ENV['RACK_ENV'] || 'development').to_sym
 Bundler.require(:default, RACK_ENV)
 
+$LOAD_PATH.unshift File.expand_path(File.join(__dir__, '..', 'lib'))
+
 DB = Sequel.connect(ENV['DATABASE_URL'])
 Sequel::Model.plugin :json_serializer
 
