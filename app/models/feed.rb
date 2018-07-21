@@ -19,7 +19,7 @@ class Feed < Sequel::Model(DB[:feeds])
     add_user_feed(user_id: user_id)
   end
 
-  def refresh
+  def refresh!
     RefreshFeedWorker.perform_async(id)
   end
 

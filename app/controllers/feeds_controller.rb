@@ -24,7 +24,7 @@ class FeedsController < ApplicationController
   post '/feeds/:feed_id/refresh' do
     feed = Feed[params[:feed_id]]
     if feed
-      job_id = feed.refresh
+      job_id = feed.refresh!
       json status: 'refreshing', job_id: job_id
     else
       status 404
