@@ -11,11 +11,7 @@ before_script:
 services:
 - postgresql
 addons:
-  apt:
-    packages:
-      - postgresql-10
-      - postgresql-client-10
-  postgresql: 10
+  postgresql: '9.6'
 deploy:
   provider: heroku
   api_key:
