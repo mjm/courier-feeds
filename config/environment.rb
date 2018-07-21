@@ -6,6 +6,13 @@ Bundler.require(:default, RACK_ENV)
 DB = Sequel.connect(ENV['DATABASE_URL'])
 Sequel::Model.plugin :json_serializer
 
+Sidekiq.configure_client do |config|
+  config.redis = { size: 1 }
+end
+Sidekiq.configure_server do |config|
+  config.redis = { size: 7 }
+end
+
 def require_app(dir)
   Pathname
     .new(__dir__)
