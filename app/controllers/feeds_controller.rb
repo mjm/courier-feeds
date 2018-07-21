@@ -20,4 +20,15 @@ class FeedsController < ApplicationController
     status 400
     json message: 'The user is already registered to this feed.'
   end
+
+  post '/feeds/:feed_id/refresh' do
+    feed = Feed[params[:feed_id]]
+    if feed
+      job_id = feed.refresh
+      json status: 'refreshing', job_id: job_id
+    else
+      status 404
+      json message: 'There is no feed with the given ID.'
+    end
+  end
 end

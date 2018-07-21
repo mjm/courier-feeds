@@ -12,7 +12,8 @@ gem 'rack-parser'
 gem 'rake', '~> 10.0'
 gem 'rdiscount'
 gem 'sequel'
-gem 'sinatra'
+gem 'sidekiq'
+gem 'sinatra', require: 'sinatra/base'
 gem 'sinatra-contrib'
 
 group :development do
@@ -22,4 +23,5 @@ end
 group :test do
   gem 'rack-test'
   gem 'rspec', '~> 3.0'
+  gem 'rspec-sidekiq'
 end

@@ -1,4 +1,3 @@
-require 'sinatra/base'
 require 'config/environment'
 
 class ApplicationController < Sinatra::Base

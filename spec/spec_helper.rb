@@ -1,5 +1,4 @@
 require 'bundler/setup'
-require 'rack/test'
 require 'base64'
 
 ENV['RACK_ENV'] = 'test'

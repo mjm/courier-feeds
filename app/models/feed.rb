@@ -19,6 +19,10 @@ class Feed < Sequel::Model(DB[:feeds])
     add_user_feed(user_id: user_id)
   end
 
+  def refresh
+    RefreshFeedWorker.perform_async(id)
+  end
+
   def self.register(attrs)
     attrs = attrs.transform_keys(&:to_sym)
     user_id = attrs.delete(:user_id)

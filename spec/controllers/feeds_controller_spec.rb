@@ -165,4 +165,46 @@ RSpec.describe FeedsController do
       end
     end
   end
+
+  describe 'POST /feeds/:feed_id/refresh' do
+    let(:parsed_body) { JSON.parse(last_response.body) }
+
+    context 'when the feed does not exist' do
+      before { post '/feeds/123/refresh' }
+
+      it 'returns a 404 response' do
+        expect(last_response.status).to be 404
+      end
+
+      it 'returns an error payload' do
+        expect(parsed_body).to match(
+          'message' => 'There is no feed with the given ID.'
+        )
+      end
+
+      it 'does not enqueue a job to refresh the feed' do
+        expect(RefreshFeedWorker).not_to have_enqueued_sidekiq_job(123)
+      end
+    end
+
+    context 'when the feed exists' do
+      let(:feed) { Feed.register(url: 'https://example.com/feed.json') }
+      before { post "/feeds/#{feed.id}/refresh" }
+
+      it 'returns a 200 response' do
+        expect(last_response.status).to be 200
+      end
+
+      it 'returns a success payload' do
+        expect(parsed_body).to match(
+          'status' => 'refreshing',
+          'job_id' => String
+        )
+      end
+
+      it 'enqueues a job to refresh the feed' do
+        expect(RefreshFeedWorker).to have_enqueued_sidekiq_job(feed.id)
+      end
+    end
+  end
 end
