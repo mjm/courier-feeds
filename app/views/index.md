@@ -26,3 +26,9 @@ Returns a `400 Bad Request` response if the user has already registered a feed w
 > **Note**: `courier-feeds` does not track information about users.
 > Users are referenced by their ID exclusively.
 > You can potentially register feeds for users that do not actually exist.
+
+### POST `/feeds/:feed_id/refresh`
+
+Requests that a feed be refreshed in the background.
+Returns a JSON object with a payload indicating if the request was successful or not.
+Returns a `404 Not Found` response if the feed is not registered.

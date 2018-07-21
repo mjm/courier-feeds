@@ -94,11 +94,6 @@ RSpec.describe FeedsController do
     let(:body) { { url: 'https://example.com/feed.json' } }
     let(:parsed_feed) { JSON.parse(last_response.body) }
 
-    it 'is documented on the index page' do
-      get '/'
-      expect(last_response.body).to include 'POST <code>/users/:user_id/feeds'
-    end
-
     context 'when the feed is not already registered' do
       before do
         header 'Content-Type', 'application/json'
@@ -168,6 +163,11 @@ RSpec.describe FeedsController do
 
   describe 'POST /feeds/:feed_id/refresh' do
     let(:parsed_body) { JSON.parse(last_response.body) }
+
+    it 'is documented on the index page' do
+      get '/'
+      expect(last_response.body).to include 'POST <code>/feeds/:feed_id/refresh</code>'
+    end
 
     context 'when the feed does not exist' do
       before { post '/feeds/123/refresh' }
