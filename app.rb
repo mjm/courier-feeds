@@ -11,5 +11,6 @@ end
 class App < Sinatra::Base
   disable :show_exceptions
   set :root, File.join(__dir__, 'app')
-  require_app :controllers
 end
+
+Courier::Service.require_app :controllers
