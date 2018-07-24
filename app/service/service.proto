@@ -1,0 +1,40 @@
+syntax = "proto3";
+package courier;
+
+import "google/protobuf/timestamp.proto";
+
+service Feeds {
+  rpc GetFeeds(ListFeedsRequest) returns (FeedList);
+  rpc GetUserFeeds(ListUserFeedsRequest) returns (FeedList);
+  rpc RegisterFeed(RegisterFeedRequest) returns (Feed);
+  rpc RefreshFeed(RefreshFeedRequest) returns (JobStatus);
+}
+
+message ListFeedsRequest {}
+message ListUserFeedsRequest {
+  int32 user_id = 1;
+}
+message RegisterFeedRequest {
+  int32 user_id = 1;
+  string url = 2;
+}
+message RefreshFeedRequest {
+  int32 feed_id = 1;
+}
+
+message Feed {
+  int32 id = 1;
+  string url = 2;
+  google.protobuf.Timestamp created_at = 3;
+  google.protobuf.Timestamp updated_at = 4;
+  google.protobuf.Timestamp refreshed_at = 5;
+}
+
+message FeedList {
+  repeated Feed feeds = 1;
+}
+
+message JobStatus {
+  string status = 1;
+  string job_id = 2;
+}

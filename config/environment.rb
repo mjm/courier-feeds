@@ -7,3 +7,5 @@ Courier::Service.configure do
   database
   background_jobs
 end
+
+Courier::Service.require_app :service

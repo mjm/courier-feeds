@@ -27,16 +27,3 @@ RSpec.configure do |config|
     end
   end
 end
-
-module ControllerSpec
-  include Rack::Test::Methods
-
-  def app
-    App
-  end
-
-  def jwt(payload)
-    token = JWT.encode(payload, Base64.decode64(ENV['JWT_SECRET']), 'HS256')
-    header 'Authorization', "Bearer #{token}"
-  end
-end
