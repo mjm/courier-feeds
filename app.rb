@@ -1,7 +1,7 @@
 require 'config/environment'
 
 class FeedsHandler
-  include Authorization
+  include Courier::Authorization
 
   def get_feeds(_req, env)
     require_token env do

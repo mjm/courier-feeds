@@ -1,8 +1,10 @@
 GIT
   remote: https://github.com/mjm/courier-service
-  revision: dfc35f181e96c7107919f30608483f6a6a7a361a
+  revision: be25a4b514a319ca5dbb0299a2a229f2893756e0
   specs:
     courier-service (0.1.0)
+      jwt
+      twirp
 
 GEM
   remote: https://rubygems.org/
