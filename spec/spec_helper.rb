@@ -1,5 +1,6 @@
 require 'bundler/setup'
 require 'base64'
+require 'courier/rspec'
 
 ENV['RACK_ENV'] = 'test'
 ENV['DATABASE_URL'] = 'postgres:///courier_feeds_test'

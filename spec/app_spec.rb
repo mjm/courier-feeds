@@ -12,8 +12,7 @@ RSpec.describe FeedsHandler do
 
     context 'when no auth token in provided' do
       it 'returns an unauthenticated error' do
-        expect(response).to be_a Twirp::Error
-        expect(response.code).to eq :unauthenticated
+        expect(response).to be_a_twirp_error :unauthenticated
       end
     end
 
@@ -60,8 +59,7 @@ RSpec.describe FeedsHandler do
 
     context 'when no auth token is provided' do
       it 'returns an unauthenticated error' do
-        expect(response).to be_a Twirp::Error
-        expect(response.code).to eq :unauthenticated
+        expect(response).to be_a_twirp_error :unauthenticated
       end
     end
 
@@ -69,7 +67,7 @@ RSpec.describe FeedsHandler do
       let(:env) { { token: other_token } }
 
       it 'returns a forbidden error' do
-        expect(response).to be_a Twirp::Error
+        expect(response).to be_a_twirp_error :permission_denied
       end
     end
 
@@ -111,8 +109,7 @@ RSpec.describe FeedsHandler do
 
     context 'when no auth token is provided' do
       it 'returns an unauthenticated error' do
-        expect(created_feed).to be_a Twirp::Error
-        expect(created_feed.code).to eq :unauthenticated
+        expect(created_feed).to be_a_twirp_error :unauthenticated
       end
     end
 
@@ -120,7 +117,7 @@ RSpec.describe FeedsHandler do
       let(:env) { { token: other_token } }
 
       it 'returns a forbidden error' do
-        expect(created_feed).to be_a Twirp::Error
+        expect(created_feed).to be_a_twirp_error :permission_denied
       end
     end
 
@@ -175,9 +172,10 @@ RSpec.describe FeedsHandler do
           end
 
           it 'returns an error response' do
-            expect(created_feed).to be_a Twirp::Error
-            expect(created_feed.code).to eq :already_exists
-            expect(created_feed.msg).to eq 'The user is already registered to this feed.'
+            expect(created_feed).to be_a_twirp_error(
+              :already_exists,
+              'The user is already registered to this feed.'
+            )
           end
         end
       end
@@ -190,8 +188,7 @@ RSpec.describe FeedsHandler do
 
     context 'when no auth token is provided' do
       it 'returns an unauthenticated error' do
-        expect(response).to be_a Twirp::Error
-        expect(response.code).to eq :unauthenticated
+        expect(response).to be_a_twirp_error :unauthenticated
       end
     end
 
@@ -202,9 +199,10 @@ RSpec.describe FeedsHandler do
         before { response }
 
         it 'returns an error response' do
-          expect(response).to be_a Twirp::Error
-          expect(response.code).to eq :not_found
-          expect(response.msg).to eq 'There is no feed with the given ID.'
+          expect(response).to be_a_twirp_error(
+            :not_found,
+            'There is no feed with the given ID.'
+          )
         end
 
         it 'does not enqueue a job to refresh the feed' do
