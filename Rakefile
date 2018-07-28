@@ -1,4 +1,5 @@
 require 'logger'
+require 'courier/rake_tasks'
 
 begin
   require 'rspec/core/rake_task'
@@ -21,8 +22,4 @@ namespace :db do
       Sequel::Migrator.run(db, 'db/migrations', target: version)
     end
   end
-end
-
-task :proto do
-  sh 'protoc --ruby_out=. --twirp_ruby_out=. --doc_out=doc/ --doc_opt=html,index.html app/service/service.proto'
 end
