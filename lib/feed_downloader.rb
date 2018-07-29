@@ -16,16 +16,12 @@ class FeedDownloader
   private
 
   def parse_posts(body)
-    JSON.parse(body).fetch('items').map { |item| Feed.from_json(item) }
-  end
-
-  Feed = Struct.new(:id, :title, :text, :html) do
-    def self.from_json(data)
-      new(
-        data.fetch('id').to_s,
-        data.fetch('title', ''),
-        data['content_text'],
-        data['content_html']
+    JSON.parse(body).fetch('items').map do |item|
+      Courier::Post.new(
+        id: item.fetch('id').to_s,
+        title: item.fetch('title', ''),
+        content_text: item.fetch('content_text', ''),
+        content_html: item.fetch('content_html', '')
       )
     end
   end

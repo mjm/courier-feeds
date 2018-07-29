@@ -47,13 +47,9 @@ RSpec.describe FeedDownloader do
 
       it 'returns an array of posts' do
         expect(subject.posts).to eq [
-          FeedDownloader::Feed.new('123', '', 'This is some content.', nil),
-          FeedDownloader::Feed.new(
-            '124',
-            'My Fancy Post Title',
-            nil,
-            '<p>I have some thoughts <em>about things</em>!</p>'
-          )
+          Courier::Post.new(id: '123', content_text: 'This is some content.'),
+          Courier::Post.new(id: '124', title: 'My Fancy Post Title',
+                            content_html: '<p>I have some thoughts <em>about things</em>!</p>')
         ]
       end
     end
