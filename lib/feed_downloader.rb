@@ -20,6 +20,7 @@ class FeedDownloader
       Courier::Post.new(
         item_id: item.fetch('id').to_s,
         title: item.fetch('title', ''),
+        url: item.fetch('url', ''),
         content_text: item.fetch('content_text', ''),
         content_html: item.fetch('content_html', ''),
         published_at: item.fetch('date_published', ''),

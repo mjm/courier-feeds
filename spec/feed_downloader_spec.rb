@@ -52,6 +52,7 @@ RSpec.describe FeedDownloader do
                             published_at: '2018-07-20T19:14:38+00:00',
                             modified_at: '2018-07-20T19:14:38+00:00'),
           Courier::Post.new(item_id: '124', title: 'My Fancy Post Title',
+                            url: 'https://example.com/my-fancy-post-title',
                             content_html: '<p>I have some thoughts <em>about things</em>!</p>')
         ]
       end
@@ -80,7 +81,8 @@ RSpec.describe FeedDownloader do
         {
           id: 124,
           title: 'My Fancy Post Title',
-          content_html: '<p>I have some thoughts <em>about things</em>!</p>'
+          content_html: '<p>I have some thoughts <em>about things</em>!</p>',
+          url: 'https://example.com/my-fancy-post-title'
         }
       ]
     }.to_json
