@@ -16,13 +16,17 @@ RSpec.describe RefreshFeedWorker do
   context 'when the feed is registered to multiple users' do
     let(:posts_client) { instance_double(Courier::PostsClient) }
     let(:first_post) do
-      Courier::Post.new(id: 'abc', title: 'Foo', content_text: 'bar baz')
+      Courier::Post.new(item_id: 'abc',
+                        title: 'Foo',
+                        content_text: 'bar baz',
+                        published_at: '2018-07-20T19:14:38+00:00',
+                        modified_at: '2018-07-20T19:14:38+00:00')
     end
     let(:first_post_with_feed) do
       Courier::Post.new(first_post.to_h.merge(feed_id: feed.id))
     end
     let(:second_post) do
-      Courier::Post.new(id: 'def', content_html: '<p>Florp!</p>')
+      Courier::Post.new(item_id: 'def', content_html: '<p>Florp!</p>')
     end
     let(:second_post_with_feed) do
       Courier::Post.new(second_post.to_h.merge(feed_id: feed.id))

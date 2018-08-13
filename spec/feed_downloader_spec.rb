@@ -47,8 +47,11 @@ RSpec.describe FeedDownloader do
 
       it 'returns an array of posts' do
         expect(subject.posts).to eq [
-          Courier::Post.new(id: '123', content_text: 'This is some content.'),
-          Courier::Post.new(id: '124', title: 'My Fancy Post Title',
+          Courier::Post.new(item_id: '123',
+                            content_text: 'This is some content.',
+                            published_at: '2018-07-20T19:14:38+00:00',
+                            modified_at: '2018-07-20T19:14:38+00:00'),
+          Courier::Post.new(item_id: '124', title: 'My Fancy Post Title',
                             content_html: '<p>I have some thoughts <em>about things</em>!</p>')
         ]
       end
@@ -70,7 +73,9 @@ RSpec.describe FeedDownloader do
       items: [
         {
           id: '123',
-          content_text: 'This is some content.'
+          content_text: 'This is some content.',
+          date_published: '2018-07-20T19:14:38+00:00',
+          date_modified: '2018-07-20T19:14:38+00:00'
         },
         {
           id: 124,

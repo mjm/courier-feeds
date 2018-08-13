@@ -18,10 +18,12 @@ class FeedDownloader
   def parse_posts(body)
     JSON.parse(body).fetch('items').map do |item|
       Courier::Post.new(
-        id: item.fetch('id').to_s,
+        item_id: item.fetch('id').to_s,
         title: item.fetch('title', ''),
         content_text: item.fetch('content_text', ''),
-        content_html: item.fetch('content_html', '')
+        content_html: item.fetch('content_html', ''),
+        published_at: item.fetch('date_published', ''),
+        modified_at: item.fetch('date_modified', '')
       )
     end
   end
