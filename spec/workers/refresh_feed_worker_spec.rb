@@ -112,5 +112,10 @@ RSpec.describe RefreshFeedWorker do
       expect(feed.etag).to eq '"asdf"'
       expect(feed.last_modified_at).to eq 'fake date'
     end
+
+    it 'only requests the feed once' do
+      expect(downloader).to receive(:feed).once
+      subject.perform(feed.id)
+    end
   end
 end

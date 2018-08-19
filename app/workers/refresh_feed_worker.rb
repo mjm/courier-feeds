@@ -16,7 +16,10 @@ class RefreshFeedWorker
   private
 
   def downloaded_feed
-    @downloaded_feed ||= feed_downloader.feed
+    return @downloaded_feed if @downloaded
+
+    @downloaded = true
+    @downloaded_feed = feed_downloader.feed
   end
 
   def feed_downloader
