@@ -9,6 +9,11 @@ class Feed < Sequel::Model(DB[:feeds])
       # I guess there would be if we had a User model but we don't
       where(id: DB[:user_feeds].where(user_id: user_id).select(:feed_id))
     end
+
+    def by_home_page_url(url)
+      url = Addressable::URI.parse(url).normalize.to_s
+      where(homepage_url: url)
+    end
   end
 
   def user_ids

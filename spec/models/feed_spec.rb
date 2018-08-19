@@ -127,4 +127,37 @@ RSpec.describe Feed do
       end
     end
   end
+
+  describe 'finding by home page URL' do
+    let!(:feed) do
+      feed = Feed.register(url: 'https://example.com/feed.json')
+      feed.update(homepage_url: 'https://example.com/')
+      feed.refresh
+    end
+    let(:found_feeds) { Feed.by_home_page_url(url).to_a }
+
+    context 'when the feed is registered with the exact matching URL' do
+      let(:url) { 'https://example.com/' }
+
+      it 'finds the feed' do
+        expect(found_feeds).to eq [feed]
+      end
+    end
+
+    context 'when the feed is registered with a different version of the same URL' do
+      let(:url) { 'https://example.com' }
+
+      it 'finds the feed' do
+        expect(found_feeds).to eq [feed]
+      end
+    end
+
+    context 'when the feed is not registered' do
+      let(:url) { 'https://example2.com/' }
+
+      it 'does not find the feed' do
+        expect(found_feeds).to eq []
+      end
+    end
+  end
 end
