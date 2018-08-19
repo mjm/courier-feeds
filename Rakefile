@@ -23,3 +23,9 @@ namespace :db do
     end
   end
 end
+
+task :update_feeds do
+  require_relative 'config/environment'
+
+  Feed.all.each(&:refresh!)
+end
