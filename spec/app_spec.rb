@@ -202,4 +202,44 @@ RSpec.describe FeedsHandler, rpc: true do
       end
     end
   end
+
+  describe '#ping' do
+    rpc_method :Ping
+    let(:request) { { title: 'foo', url: 'https://example.com' } }
+
+    let!(:feed1) do
+      Feed.register(url: 'https://example.com/feed.json',
+                    homepage_url: 'https://example.com/')
+    end
+    let!(:feed2) do
+      Feed.register(url: 'https://example.com/feed2.json',
+                    homepage_url: 'https://example.com/')
+    end
+    let!(:feed3) do
+      Feed.register(url: 'https://example2.com/feed.json',
+                    homepage_url: 'https://example2.com/')
+    end
+
+    it 'returns a list of the matching feeds' do
+      expect(response.feeds.map(&:to_hash)).to match [
+        hash_including(url: 'https://example.com/feed.json'),
+        hash_including(url: 'https://example.com/feed2.json')
+      ]
+    end
+
+    it 'enqueues jobs to refresh the matching feeds' do
+      response
+      expect(RefreshFeedWorker).to have_enqueued_sidekiq_job(feed1.id)
+      expect(RefreshFeedWorker).to have_enqueued_sidekiq_job(feed2.id)
+      expect(RefreshFeedWorker).not_to have_enqueued_sidekiq_job(feed3.id)
+    end
+
+    context 'when no feeds match the URL' do
+      let(:request) { { title: 'foo', url: 'https://example3.com/' } }
+
+      it 'returns an empty list' do
+        expect(response).to eq Courier::FeedList.new
+      end
+    end
+  end
 end

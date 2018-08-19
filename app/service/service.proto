@@ -13,6 +13,8 @@ service Feeds {
   rpc RegisterFeed(RegisterFeedRequest) returns (Feed);
   /// Triggers a background job to refresh an individual feed.
   rpc RefreshFeed(RefreshFeedRequest) returns (JobStatus);
+  /// Refreshes the feeds for a ping request from a blog.
+  rpc Ping(PingRequest) returns (FeedList);
 }
 
 /**

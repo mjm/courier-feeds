@@ -36,6 +36,13 @@ class FeedsHandler
       end
     end
   end
+
+  def ping(req, _env)
+    feeds = Feed.by_home_page_url(req.url).to_a
+    feeds.each(&:refresh!)
+
+    { feeds: feeds.map(&:to_proto) }
+  end
 end
 
 class DocHandler

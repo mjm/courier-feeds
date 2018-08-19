@@ -17,6 +17,10 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "courier.RefreshFeedRequest" do
     optional :feed_id, :int32, 1
   end
+  add_message "courier.PingRequest" do
+    optional :title, :string, 1
+    optional :url, :string, 2
+  end
   add_message "courier.Feed" do
     optional :id, :int32, 1
     optional :url, :string, 2
@@ -40,6 +44,7 @@ module Courier
   ListUserFeedsRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.ListUserFeedsRequest").msgclass
   RegisterFeedRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.RegisterFeedRequest").msgclass
   RefreshFeedRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.RefreshFeedRequest").msgclass
+  PingRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.PingRequest").msgclass
   Feed = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.Feed").msgclass
   FeedList = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.FeedList").msgclass
   JobStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.JobStatus").msgclass

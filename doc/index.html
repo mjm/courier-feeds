@@ -199,6 +199,10 @@
                 </li>
               
                 <li>
+                  <a href="#courier.PingRequest"><span class="badge">M</span>PingRequest</a>
+                </li>
+              
+                <li>
                   <a href="#courier.RefreshFeedRequest"><span class="badge">M</span>RefreshFeedRequest</a>
                 </li>
               
@@ -376,6 +380,36 @@
 
         
       
+        <h3 id="courier.PingRequest">PingRequest</h3>
+        <p>Request message for pinging from a blog.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>title</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>The title of the blog. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>The home page URL of the blog. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+        
+
+        
+      
         <h3 id="courier.RefreshFeedRequest">RefreshFeedRequest</h3>
         <p>Request message for refreshing a feed.</p>
 
@@ -469,6 +503,13 @@
                 <td><a href="#courier.RefreshFeedRequest">RefreshFeedRequest</a></td>
                 <td><a href="#courier.JobStatus">JobStatus</a></td>
                 <td><p>Triggers a background job to refresh an individual feed.</p></td>
+              </tr>
+            
+              <tr>
+                <td>Ping</td>
+                <td><a href="#courier.PingRequest">PingRequest</a></td>
+                <td><a href="#courier.FeedList">FeedList</a></td>
+                <td><p>Refreshes the feeds for a ping request from a blog.</p></td>
               </tr>
             
           </tbody>
