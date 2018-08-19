@@ -86,6 +86,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  addressable
   courier-posts!
   courier-service!
   jwt

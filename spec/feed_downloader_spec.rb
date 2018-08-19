@@ -79,7 +79,7 @@ RSpec.describe FeedDownloader do
 
       it 'includes information about the site' do
         expect(subject.feed.title).to eq 'Example Blog'
-        expect(subject.feed.home_page_url).to eq 'https://example.com'
+        expect(subject.feed.home_page_url).to eq 'https://example.com/'
       end
     end
   end

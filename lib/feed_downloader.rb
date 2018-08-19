@@ -38,10 +38,16 @@ class FeedDownloader
   def parse_feed(response)
     parsed = JSON.parse(response.body)
     Feed.new(parsed.fetch('title'),
-             parsed['home_page_url'],
+             normalize_url(parsed['home_page_url']),
              response.headers['etag'],
              response.headers['last-modified'],
              parse_posts(parsed.fetch('items')))
+  end
+
+  # It's important that we normalize URLs because we need to be able to
+  # later be able to find the feed that goes with a home page URL.
+  def normalize_url(url)
+    Addressable::URI.parse(url)&.normalize&.to_s
   end
 
   def parse_posts(posts)

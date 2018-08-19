@@ -4,7 +4,7 @@ RSpec.describe RefreshFeedWorker do
   let(:downloaded_feed) do
     FeedDownloader::Feed.new(
       'Blog Title',
-      'https://example.com',
+      'https://example.com/',
       '"qwer"',
       'a fake date',
       posts
@@ -39,7 +39,7 @@ RSpec.describe RefreshFeedWorker do
     subject.perform(feed.id)
     feed.reload
     expect(feed.title).to eq 'Blog Title'
-    expect(feed.homepage_url).to eq 'https://example.com'
+    expect(feed.homepage_url).to eq 'https://example.com/'
   end
 
   context 'when the feed is registered to multiple users' do
