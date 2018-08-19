@@ -21,7 +21,7 @@ class FeedDownloader
     handle_response response
   end
 
-  Feed = Struct.new(:title, :url, :etag, :last_modified, :posts)
+  Feed = Struct.new(:title, :home_page_url, :etag, :last_modified, :posts)
 
   private
 
@@ -37,8 +37,8 @@ class FeedDownloader
 
   def parse_feed(response)
     parsed = JSON.parse(response.body)
-    Feed.new(nil,
-             nil,
+    Feed.new(parsed.fetch('title'),
+             parsed['home_page_url'],
              response.headers['etag'],
              response.headers['last-modified'],
              parse_posts(parsed.fetch('items')))

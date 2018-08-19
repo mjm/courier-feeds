@@ -35,6 +35,13 @@ RSpec.describe RefreshFeedWorker do
     expect(feed.last_modified_at).to eq 'a fake date'
   end
 
+  it 'updates the site info for the feed' do
+    subject.perform(feed.id)
+    feed.reload
+    expect(feed.title).to eq 'Blog Title'
+    expect(feed.homepage_url).to eq 'https://example.com'
+  end
+
   context 'when the feed is registered to multiple users' do
     let(:posts_client) { instance_double(Courier::PostsClient) }
     let(:first_post) do
@@ -98,7 +105,10 @@ RSpec.describe RefreshFeedWorker do
     let(:downloaded_feed) { nil } # FeedDownloader returns nil for 304
 
     before do
-      feed.update(etag: '"asdf"', last_modified_at: 'fake date')
+      feed.update(etag: '"asdf"',
+                  last_modified_at: 'fake date',
+                  title: 'The Title',
+                  homepage_url: 'https://foo.bar')
     end
 
     it 'updates the refreshed_at time of the feed' do
@@ -111,6 +121,13 @@ RSpec.describe RefreshFeedWorker do
       feed.reload
       expect(feed.etag).to eq '"asdf"'
       expect(feed.last_modified_at).to eq 'fake date'
+    end
+
+    it 'does not change the site information fields in the feed' do
+      subject.perform(feed.id)
+      feed.reload
+      expect(feed.title).to eq 'The Title'
+      expect(feed.homepage_url).to eq 'https://foo.bar'
     end
 
     it 'only requests the feed once' do

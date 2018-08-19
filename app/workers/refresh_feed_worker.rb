@@ -56,6 +56,8 @@ class RefreshFeedWorker
     if downloaded_feed
       feed.etag = downloaded_feed.etag
       feed.last_modified_at = downloaded_feed.last_modified
+      feed.title = downloaded_feed.title
+      feed.homepage_url = downloaded_feed.home_page_url
     end
     feed.save
   end

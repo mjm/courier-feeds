@@ -38,6 +38,13 @@ message RefreshFeedRequest {
   /// The ID of the feed to refresh.
   int32 feed_id = 1;
 }
+/// Request message for pinging from a blog.
+message PingRequest {
+  /// The title of the blog.
+  string title = 1;
+  /// The home page URL of the blog.
+  string url = 2;
+}
 
 /// Message describing a feed registered in the service.
 message Feed {
@@ -51,6 +58,10 @@ message Feed {
   google.protobuf.Timestamp updated_at = 4;
   /// Timestamp for last time the feed was checked for new content.
   google.protobuf.Timestamp refreshed_at = 5;
+  /// The title of the feed, as read from the feed itself.
+  string title = 6;
+  /// The URL of the home page of the site this feed is for.
+  string home_page_url = 7;
 }
 
 /// Message containing a list of multiple Feeds.

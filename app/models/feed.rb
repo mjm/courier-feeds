@@ -37,7 +37,9 @@ class Feed < Sequel::Model(DB[:feeds])
       url: url,
       refreshed_at: refreshed_at.to_proto,
       created_at: created_at.to_proto,
-      updated_at: updated_at.to_proto
+      updated_at: updated_at.to_proto,
+      title: title,
+      home_page_url: homepage_url
     )
   end
 end

@@ -23,6 +23,8 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :created_at, :message, 3, "google.protobuf.Timestamp"
     optional :updated_at, :message, 4, "google.protobuf.Timestamp"
     optional :refreshed_at, :message, 5, "google.protobuf.Timestamp"
+    optional :title, :string, 6
+    optional :home_page_url, :string, 7
   end
   add_message "courier.FeedList" do
     repeated :feeds, :message, 1, "courier.Feed"

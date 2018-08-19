@@ -26,14 +26,18 @@ RSpec.describe FeedsHandler, rpc: true do
             url: 'https://example.com/feed.json',
             refreshed_at: nil,
             created_at: { seconds: Integer, nanos: Integer },
-            updated_at: { seconds: Integer, nanos: Integer }
+            updated_at: { seconds: Integer, nanos: Integer },
+            title: '',
+            home_page_url: ''
           },
           {
             id: Integer,
             url: 'https://blog.example.com/feed/json',
             refreshed_at: nil,
             created_at: { seconds: Integer, nanos: Integer },
-            updated_at: { seconds: Integer, nanos: Integer }
+            updated_at: { seconds: Integer, nanos: Integer },
+            title: '',
+            home_page_url: ''
           }
         ]
       end
@@ -62,6 +66,11 @@ RSpec.describe FeedsHandler, rpc: true do
       let(:feed2) { Feed.register(url: 'https://example2.com/feed.json') }
       before { feed2.add_user_id(456) }
 
+      before do
+        feed1.update(title: 'My Cool Blog',
+                     homepage_url: 'https://example.com')
+      end
+
       it 'returns a list of feeds registered to the user' do
         expect(feeds.map(&:to_hash)).to match [
           {
@@ -69,7 +78,9 @@ RSpec.describe FeedsHandler, rpc: true do
             url: 'https://example.com/feed.json',
             refreshed_at: nil,
             created_at: { seconds: Integer, nanos: Integer },
-            updated_at: { seconds: Integer, nanos: Integer }
+            updated_at: { seconds: Integer, nanos: Integer },
+            title: 'My Cool Blog',
+            home_page_url: 'https://example.com'
           }
         ]
       end
@@ -104,13 +115,19 @@ RSpec.describe FeedsHandler, rpc: true do
           url: 'https://example.com/feed.json',
           refreshed_at: nil,
           created_at: { seconds: Integer, nanos: Integer },
-          updated_at: { seconds: Integer, nanos: Integer }
+          updated_at: { seconds: Integer, nanos: Integer },
+          title: '',
+          home_page_url: ''
         })
       end
     end
 
     context 'when the feed has already been registered' do
       let!(:feed) { Feed.register(url: 'https://example.com/feed.json') }
+      before do
+        feed.update(title: 'My Cool Blog',
+                    homepage_url: 'https://example.com')
+      end
 
       context 'and is not registered to this user' do
         before { response }
@@ -121,6 +138,11 @@ RSpec.describe FeedsHandler, rpc: true do
 
         it 'registers the feed for the user' do
           expect(feed.user_ids).to eq [123]
+        end
+
+        it 'includes the title and home page url in the feed response' do
+          expect(response.title).to eq 'My Cool Blog'
+          expect(response.home_page_url).to eq 'https://example.com'
         end
       end
 

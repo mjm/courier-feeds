@@ -38,6 +38,11 @@ RSpec.describe FeedDownloader do
       it 'returns a feed with no posts' do
         expect(subject.feed.posts).to be_empty
       end
+
+      it 'includes some information about the site' do
+        expect(subject.feed.title).to eq 'Example Blog'
+        expect(subject.feed.home_page_url).to be_nil
+      end
     end
 
     context 'and the feed has items' do
@@ -71,6 +76,11 @@ RSpec.describe FeedDownloader do
         expect(subject.feed.etag).to eq '"asdf"'
         expect(subject.feed.last_modified).to eq 'fake date'
       end
+
+      it 'includes information about the site' do
+        expect(subject.feed.title).to eq 'Example Blog'
+        expect(subject.feed.home_page_url).to eq 'https://example.com'
+      end
     end
   end
 
@@ -96,6 +106,7 @@ RSpec.describe FeedDownloader do
     {
       title: 'Example Blog',
       feed_url: 'https://example.com/feed.json',
+      home_page_url: 'https://example.com',
       items: [
         {
           id: '123',
