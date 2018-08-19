@@ -1,13 +1,19 @@
 class FeedDownloader
-  attr_reader :url, :etag, :last_modified
+  attr_reader :url, :etag, :last_modified, :logger
 
-  def initialize(url, etag: nil, last_modified: nil)
+  def initialize(url,
+                 etag: nil,
+                 last_modified: nil,
+                 logger: Logger.new(File::NULL))
     @url = url
     @etag = etag
     @last_modified = last_modified
+    @logger = logger
   end
 
   def feed
+    logger.debug "Downloading feed at #{url}"
+
     response = Faraday.new(url).get do |req|
       req.headers['If-None-Match'] = etag if etag
       req.headers['If-Modified-Since'] = last_modified if last_modified
@@ -20,6 +26,8 @@ class FeedDownloader
   private
 
   def handle_response(response)
+    logger.info "Downloaded #{url} - #{response.status} #{response.body.size}"
+
     case response.status
     when 200 then parse_feed(response)
     when 304 then nil

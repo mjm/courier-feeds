@@ -22,7 +22,8 @@ class RefreshFeedWorker
   def feed_downloader
     FeedDownloader.new(feed.url,
                        etag: feed.etag,
-                       last_modified: feed.last_modified_at)
+                       last_modified: feed.last_modified_at,
+                       logger: logger)
   end
 
   def feed_posts

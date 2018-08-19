@@ -23,7 +23,8 @@ RSpec.describe RefreshFeedWorker do
     expect(FeedDownloader).to have_received(:new).with(
       'https://example.com/feed.json',
       etag: nil,
-      last_modified: nil
+      last_modified: nil,
+      logger: an_instance_of(Logger)
     )
   end
 
@@ -86,7 +87,8 @@ RSpec.describe RefreshFeedWorker do
       expect(FeedDownloader).to receive(:new).with(
         'https://example.com/feed.json',
         etag: '"asdf"',
-        last_modified: 'fake date'
+        last_modified: 'fake date',
+        logger: an_instance_of(Logger)
       )
       subject.perform(feed.id)
     end
