@@ -1,22 +1,43 @@
 class FeedDownloader
-  attr_reader :url
+  attr_reader :url, :etag, :last_modified
 
-  def initialize(url)
+  def initialize(url, etag: nil, last_modified: nil)
     @url = url
+    @etag = etag
+    @last_modified = last_modified
   end
 
-  def posts
-    response = Faraday.get(url)
+  def feed
+    response = Faraday.new(url).get do |req|
+      req.headers['If-None-Match'] = etag if etag
+      req.headers['If-Modified-Since'] = last_modified if last_modified
+    end
+    handle_response response
+  end
+
+  Feed = Struct.new(:title, :url, :etag, :last_modified, :posts)
+
+  private
+
+  def handle_response(response)
     case response.status
-    when 200 then parse_posts(response.body)
+    when 200 then parse_feed(response)
+    when 304 then nil
     when 404 then raise NotFoundError, url
     end
   end
 
-  private
+  def parse_feed(response)
+    parsed = JSON.parse(response.body)
+    Feed.new(nil,
+             nil,
+             response.headers['etag'],
+             response.headers['last-modified'],
+             parse_posts(parsed.fetch('items')))
+  end
 
-  def parse_posts(body)
-    JSON.parse(body).fetch('items').map do |item|
+  def parse_posts(posts)
+    posts.map do |item|
       Courier::Post.new(
         item_id: item.fetch('id').to_s,
         title: item.fetch('title', ''),

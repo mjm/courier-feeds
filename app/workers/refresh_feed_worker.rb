@@ -10,19 +10,25 @@ class RefreshFeedWorker
     feed_posts.each do |post|
       import_post post
     end
-    feed.update refreshed_at: Time.now
+    update_feed
   end
 
   private
 
+  def downloaded_feed
+    @downloaded_feed ||= feed_downloader.feed
+  end
+
+  def feed_downloader
+    FeedDownloader.new(feed.url,
+                       etag: feed.etag,
+                       last_modified: feed.last_modified_at)
+  end
+
   def feed_posts
-    @feed_posts ||= begin
-                      posts = FeedDownloader.new(feed.url).posts
-                      posts.each do |post|
-                        post.feed_id = feed.id
-                      end
-                      posts
-                    end
+    @feed_posts ||= (downloaded_feed&.posts || []).each do |post|
+      post.feed_id = feed.id
+    end
   end
 
   def import_post(post)
@@ -39,5 +45,14 @@ class RefreshFeedWorker
     @posts_client ||= Courier::PostsClient.connect(
       token: Courier::Service::TOKEN
     )
+  end
+
+  def update_feed
+    feed.refreshed_at = Time.now
+    if downloaded_feed
+      feed.etag = downloaded_feed.etag
+      feed.last_modified_at = downloaded_feed.last_modified
+    end
+    feed.save
   end
 end
