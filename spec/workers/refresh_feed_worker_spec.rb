@@ -66,6 +66,7 @@ RSpec.describe RefreshFeedWorker do
     end
     before do
       feed.add_user_id(123)
+      feed.update_settings(123, autopost: true)
       feed.add_user_id(234)
     end
 
@@ -73,11 +74,13 @@ RSpec.describe RefreshFeedWorker do
       [123, 234].each do |user_id|
         expect(posts_client).to receive(:import_post).with(
           user_id: user_id,
-          post: first_post_with_feed
+          post: first_post_with_feed,
+          autopost_delay: user_id == 123 ? 300 : 0
         )
         expect(posts_client).to receive(:import_post).with(
           user_id: user_id,
-          post: second_post_with_feed
+          post: second_post_with_feed,
+          autopost_delay: user_id == 123 ? 300 : 0
         )
       end
 

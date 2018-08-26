@@ -42,7 +42,17 @@ class RefreshFeedWorker
   end
 
   def import_post_for_user(post, user_id)
-    posts_client.import_post(user_id: user_id, post: post)
+    posts_client.import_post(user_id: user_id,
+                             post: post,
+                             autopost_delay: autopost_delay(user_id))
+  end
+
+  def autopost_delay(user_id)
+    if feed.user_feed(user_id).autopost
+      300 # 5 minutes
+    else
+      0
+    end
   end
 
   def posts_client
