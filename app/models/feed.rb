@@ -24,6 +24,14 @@ class Feed < Sequel::Model(DB[:feeds])
     add_user_feed(user_id: user_id)
   end
 
+  def user_feed(user_id)
+    user_feeds_dataset.where(user_id: user_id).first
+  end
+
+  def update_settings(user_id, changes)
+    user_feed(user_id).update(changes)
+  end
+
   def refresh!
     RefreshFeedWorker.perform_async(id)
   end
@@ -36,7 +44,7 @@ class Feed < Sequel::Model(DB[:feeds])
     feed
   end
 
-  def to_proto
+  def to_proto(user_id: nil)
     Courier::Feed.new(
       id: id,
       url: url,
@@ -45,7 +53,14 @@ class Feed < Sequel::Model(DB[:feeds])
       updated_at: updated_at.to_proto,
       title: title,
       home_page_url: homepage_url
-    )
+    ).tap do |feed|
+      if user_id
+        user_feed = self.user_feed(user_id).refresh
+        feed.settings = Courier::FeedSettings.new(
+          autopost: user_feed.autopost
+        )
+      end
+    end
   end
 end
 

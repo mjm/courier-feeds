@@ -187,6 +187,14 @@
                 </li>
               
                 <li>
+                  <a href="#courier.FeedSettings"><span class="badge">M</span>FeedSettings</a>
+                </li>
+              
+                <li>
+                  <a href="#courier.FeedSettingsChanges"><span class="badge">M</span>FeedSettingsChanges</a>
+                </li>
+              
+                <li>
                   <a href="#courier.JobStatus"><span class="badge">M</span>JobStatus</a>
                 </li>
               
@@ -210,6 +218,14 @@
                   <a href="#courier.RegisterFeedRequest"><span class="badge">M</span>RegisterFeedRequest</a>
                 </li>
               
+                <li>
+                  <a href="#courier.UpdateFeedSettingsRequest"><span class="badge">M</span>UpdateFeedSettingsRequest</a>
+                </li>
+              
+              
+                <li>
+                  <a href="#courier.FeedSettingsChanges.Flag"><span class="badge">E</span>FeedSettingsChanges.Flag</a>
+                </li>
               
               
               
@@ -291,6 +307,13 @@
                   <td><p>The URL of the home page of the site this feed is for. </p></td>
                 </tr>
               
+                <tr>
+                  <td>settings</td>
+                  <td><a href="#courier.FeedSettings">FeedSettings</a></td>
+                  <td></td>
+                  <td><p>The settings the user has configured for the feed. This may be empty if the message is not scoped to a particular user. </p></td>
+                </tr>
+              
             </tbody>
           </table>
         
@@ -312,6 +335,52 @@
                   <td><a href="#courier.Feed">Feed</a></td>
                   <td>repeated</td>
                   <td><p>The feeds in the list. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+        
+
+        
+      
+        <h3 id="courier.FeedSettings">FeedSettings</h3>
+        <p>Message describing the settings a user has configured for a feed.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>autopost</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>Whether the posts in the feed should be tweeted automatically. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+        
+
+        
+      
+        <h3 id="courier.FeedSettingsChanges">FeedSettingsChanges</h3>
+        <p>Message describing desired changes to a user's settings for a feed.</p><p>This differs from FeedSettings by being able to distinguish between a setting that should be turned off and one that should be left unchanged.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>autopost</td>
+                  <td><a href="#courier.FeedSettingsChanges.Flag">FeedSettingsChanges.Flag</a></td>
+                  <td></td>
+                  <td><p>Whether the posts in the feed should be tweeted automatically. </p></td>
                 </tr>
               
             </tbody>
@@ -463,7 +532,74 @@
 
         
       
+        <h3 id="courier.UpdateFeedSettingsRequest">UpdateFeedSettingsRequest</h3>
+        <p>Request message for updating a user's settings for a feed.</p>
 
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>feed_id</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>The ID of the feed to update. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>user_id</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>The user ID whose settings should be changed.
+ Feeds are potentially shared between users, but settings are user-specific. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>settings</td>
+                  <td><a href="#courier.FeedSettingsChanges">FeedSettingsChanges</a></td>
+                  <td></td>
+                  <td><p>The settings changes to make. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+        
+
+        
+      
+
+      
+        <h3 id="courier.FeedSettingsChanges.Flag">FeedSettingsChanges.Flag</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>UNCHANGED</td>
+                <td>0</td>
+                <td><p>The value for the setting should not be changed from its current value.</p></td>
+              </tr>
+            
+              <tr>
+                <td>OFF</td>
+                <td>1</td>
+                <td><p>The setting should be turned off.</p></td>
+              </tr>
+            
+              <tr>
+                <td>ON</td>
+                <td>2</td>
+                <td><p>The setting should be turned on.</p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       
@@ -503,6 +639,13 @@
                 <td><a href="#courier.RefreshFeedRequest">RefreshFeedRequest</a></td>
                 <td><a href="#courier.JobStatus">JobStatus</a></td>
                 <td><p>Triggers a background job to refresh an individual feed.</p></td>
+              </tr>
+            
+              <tr>
+                <td>UpdateFeedSettings</td>
+                <td><a href="#courier.UpdateFeedSettingsRequest">UpdateFeedSettingsRequest</a></td>
+                <td><a href="#courier.Feed">Feed</a></td>
+                <td><p>Updates the settings for a user&#39;s feed.</p></td>
               </tr>
             
               <tr>

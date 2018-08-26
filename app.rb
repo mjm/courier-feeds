@@ -12,14 +12,14 @@ class FeedsHandler
   def get_user_feeds(req, env)
     require_user env, id: req.user_id do
       feeds = Feed.by_user(req.user_id).all
-      { feeds: feeds.map(&:to_proto) }
+      { feeds: feeds.map { |f| f.to_proto(user_id: req.user_id) } }
     end
   end
 
   def register_feed(req, env)
     require_user env, id: req.user_id do
       feed = Feed.register(req.to_hash)
-      feed.to_proto
+      feed.to_proto(user_id: req.user_id)
     rescue Sequel::UniqueConstraintViolation
       Twirp::Error.already_exists 'The user is already registered to this feed.'
     end
@@ -34,6 +34,17 @@ class FeedsHandler
       else
         Twirp::Error.not_found 'There is no feed with the given ID.'
       end
+    end
+  end
+
+  def update_feed_settings(req, env)
+    require_user env, id: req.user_id do
+      feed = Feed[req.feed_id]
+      settings = req.settings.to_hash
+        .reject { |_k, v| v == :UNCHANGED }
+        .transform_values { |v| v == :ON }
+      feed.update_settings(req.user_id, settings)
+      feed.to_proto(user_id: req.user_id)
     end
   end
 

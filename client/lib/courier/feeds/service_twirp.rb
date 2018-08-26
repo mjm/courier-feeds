@@ -10,6 +10,7 @@ module Courier
     rpc :GetUserFeeds, ListUserFeedsRequest, FeedList, :ruby_method => :get_user_feeds
     rpc :RegisterFeed, RegisterFeedRequest, Feed, :ruby_method => :register_feed
     rpc :RefreshFeed, RefreshFeedRequest, JobStatus, :ruby_method => :refresh_feed
+    rpc :UpdateFeedSettings, UpdateFeedSettingsRequest, Feed, :ruby_method => :update_feed_settings
     rpc :Ping, PingRequest, FeedList, :ruby_method => :ping
   end
 

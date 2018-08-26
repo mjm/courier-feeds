@@ -17,6 +17,11 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "courier.RefreshFeedRequest" do
     optional :feed_id, :int32, 1
   end
+  add_message "courier.UpdateFeedSettingsRequest" do
+    optional :feed_id, :int32, 1
+    optional :user_id, :int32, 2
+    optional :settings, :message, 3, "courier.FeedSettingsChanges"
+  end
   add_message "courier.PingRequest" do
     optional :title, :string, 1
     optional :url, :string, 2
@@ -29,9 +34,21 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
     optional :refreshed_at, :message, 5, "google.protobuf.Timestamp"
     optional :title, :string, 6
     optional :home_page_url, :string, 7
+    optional :settings, :message, 8, "courier.FeedSettings"
   end
   add_message "courier.FeedList" do
     repeated :feeds, :message, 1, "courier.Feed"
+  end
+  add_message "courier.FeedSettings" do
+    optional :autopost, :bool, 1
+  end
+  add_message "courier.FeedSettingsChanges" do
+    optional :autopost, :enum, 1, "courier.FeedSettingsChanges.Flag"
+  end
+  add_enum "courier.FeedSettingsChanges.Flag" do
+    value :UNCHANGED, 0
+    value :OFF, 1
+    value :ON, 2
   end
   add_message "courier.JobStatus" do
     optional :status, :string, 1
@@ -44,8 +61,12 @@ module Courier
   ListUserFeedsRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.ListUserFeedsRequest").msgclass
   RegisterFeedRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.RegisterFeedRequest").msgclass
   RefreshFeedRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.RefreshFeedRequest").msgclass
+  UpdateFeedSettingsRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.UpdateFeedSettingsRequest").msgclass
   PingRequest = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.PingRequest").msgclass
   Feed = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.Feed").msgclass
   FeedList = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.FeedList").msgclass
+  FeedSettings = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.FeedSettings").msgclass
+  FeedSettingsChanges = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.FeedSettingsChanges").msgclass
+  FeedSettingsChanges::Flag = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.FeedSettingsChanges.Flag").enummodule
   JobStatus = Google::Protobuf::DescriptorPool.generated_pool.lookup("courier.JobStatus").msgclass
 end

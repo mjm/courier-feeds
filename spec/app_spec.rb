@@ -28,7 +28,8 @@ RSpec.describe FeedsHandler, rpc: true do
             created_at: { seconds: Integer, nanos: Integer },
             updated_at: { seconds: Integer, nanos: Integer },
             title: '',
-            home_page_url: ''
+            home_page_url: '',
+            settings: nil
           },
           {
             id: Integer,
@@ -37,7 +38,8 @@ RSpec.describe FeedsHandler, rpc: true do
             created_at: { seconds: Integer, nanos: Integer },
             updated_at: { seconds: Integer, nanos: Integer },
             title: '',
-            home_page_url: ''
+            home_page_url: '',
+            settings: nil
           }
         ]
       end
@@ -62,7 +64,10 @@ RSpec.describe FeedsHandler, rpc: true do
 
     context 'when the user has feeds' do
       let(:feed1) { Feed.register(url: 'https://example.com/feed.json') }
-      before { feed1.add_user_id(123) }
+      before do
+        feed1.add_user_id(123)
+        feed1.update_settings(123, autopost: true)
+      end
       let(:feed2) { Feed.register(url: 'https://example2.com/feed.json') }
       before { feed2.add_user_id(456) }
 
@@ -80,7 +85,8 @@ RSpec.describe FeedsHandler, rpc: true do
             created_at: { seconds: Integer, nanos: Integer },
             updated_at: { seconds: Integer, nanos: Integer },
             title: 'My Cool Blog',
-            home_page_url: 'https://example.com'
+            home_page_url: 'https://example.com',
+            settings: { autopost: true }
           }
         ]
       end
@@ -110,15 +116,16 @@ RSpec.describe FeedsHandler, rpc: true do
       end
 
       it 'returns a description of the feed' do
-        expect(response.to_hash).to match({
+        expect(response.to_hash).to match(
           id: Integer,
           url: 'https://example.com/feed.json',
           refreshed_at: nil,
           created_at: { seconds: Integer, nanos: Integer },
           updated_at: { seconds: Integer, nanos: Integer },
           title: '',
-          home_page_url: ''
-        })
+          home_page_url: '',
+          settings: { autopost: false }
+        )
       end
     end
 
@@ -239,6 +246,47 @@ RSpec.describe FeedsHandler, rpc: true do
 
       it 'returns an empty list' do
         expect(response).to eq Courier::FeedList.new
+      end
+    end
+  end
+
+  describe '#update_feed_settings' do
+    rpc_method :UpdateFeedSettings
+    let(:request) { { feed_id: feed.id, user_id: 123, settings: settings } }
+    let(:settings) { Courier::FeedSettingsChanges.new(autopost: :ON) }
+    let(:feed) { Feed.register(url: 'https://example.com/feed.json') }
+    before do
+      feed.add_user_id(123)
+    end
+
+    include_examples 'an unauthenticated request'
+    include_examples 'a request from another user'
+
+    it 'changes the affected settings' do
+      response
+      expect(feed.user_feeds.first.autopost).to be true
+    end
+
+    it 'returns a description of the updated feed' do
+      expect(response.to_hash).to match(
+          id: Integer,
+          url: 'https://example.com/feed.json',
+          refreshed_at: nil,
+          created_at: { seconds: Integer, nanos: Integer },
+          updated_at: { seconds: Integer, nanos: Integer },
+          title: '',
+          home_page_url: '',
+          settings: { autopost: true }
+      )
+    end
+
+    context 'when the setting value is unchanged' do
+      let(:settings) { Courier::FeedSettingsChanges.new }
+      before { feed.update_settings(123, autopost: true) }
+
+      it 'does not change the setting' do
+        response
+        expect(feed.user_feeds.first.autopost).to be true
       end
     end
   end

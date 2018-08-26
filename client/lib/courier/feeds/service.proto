@@ -13,6 +13,8 @@ service Feeds {
   rpc RegisterFeed(RegisterFeedRequest) returns (Feed);
   /// Triggers a background job to refresh an individual feed.
   rpc RefreshFeed(RefreshFeedRequest) returns (JobStatus);
+  /// Updates the settings for a user's feed.
+  rpc UpdateFeedSettings(UpdateFeedSettingsRequest) returns (Feed);
   /// Refreshes the feeds for a ping request from a blog.
   rpc Ping(PingRequest) returns (FeedList);
 }
@@ -40,6 +42,16 @@ message RefreshFeedRequest {
   /// The ID of the feed to refresh.
   int32 feed_id = 1;
 }
+/// Request message for updating a user's settings for a feed.
+message UpdateFeedSettingsRequest {
+  /// The ID of the feed to update.
+  int32 feed_id = 1;
+  /// The user ID whose settings should be changed.
+  //  Feeds are potentially shared between users, but settings are user-specific.
+  int32 user_id = 2;
+  /// The settings changes to make.
+  FeedSettingsChanges settings = 3;
+}
 /// Request message for pinging from a blog.
 message PingRequest {
   /// The title of the blog.
@@ -64,12 +76,36 @@ message Feed {
   string title = 6;
   /// The URL of the home page of the site this feed is for.
   string home_page_url = 7;
+  /// The settings the user has configured for the feed. This may be empty if the message is not scoped to a particular user.
+  FeedSettings settings = 8;
 }
 
 /// Message containing a list of multiple Feeds.
 message FeedList {
   /// The feeds in the list.
   repeated Feed feeds = 1;
+}
+
+/// Message describing the settings a user has configured for a feed.
+message FeedSettings {
+  /// Whether the posts in the feed should be tweeted automatically.
+  bool autopost = 1;
+}
+
+/// Message describing desired changes to a user's settings for a feed.
+//  This differs from FeedSettings by being able to distinguish between a setting that should be turned off and one that should be left unchanged.
+message FeedSettingsChanges {
+  enum Flag {
+    /// The value for the setting should not be changed from its current value.
+    UNCHANGED = 0;
+    /// The setting should be turned off.
+    OFF = 1;
+    /// The setting should be turned on.
+    ON = 2;
+  }
+
+  /// Whether the posts in the feed should be tweeted automatically.
+  Flag autopost = 1;
 }
 
 /// Message describing a background job.
