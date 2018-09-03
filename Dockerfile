@@ -10,4 +10,4 @@ COPY . .
 
 EXPOSE 3000
 ENV RACK_ENV production
-ENTRYPOINT ["bundle", "exec", "rackup", "-p", "3000", "-o", "0.0.0.0"]
+CMD ["bundle", "exec", "rackup", "-p", "3000", "-o", "0.0.0.0"]
