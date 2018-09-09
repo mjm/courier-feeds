@@ -29,9 +29,9 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
   add_message "courier.Feed" do
     optional :id, :int32, 1
     optional :url, :string, 2
-    optional :created_at, :message, 3, "google.protobuf.Timestamp"
-    optional :updated_at, :message, 4, "google.protobuf.Timestamp"
-    optional :refreshed_at, :message, 5, "google.protobuf.Timestamp"
+    optional :created_at, :string, 3
+    optional :updated_at, :string, 4
+    optional :refreshed_at, :string, 5
     optional :title, :string, 6
     optional :home_page_url, :string, 7
     optional :settings, :message, 8, "courier.FeedSettings"

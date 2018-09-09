@@ -67,11 +67,11 @@ message Feed {
   /// The URL of the feed.
   string url = 2;
   /// Timestamp for when the feed was first registered by any user.
-  google.protobuf.Timestamp created_at = 3;
+  string created_at = 3;
   /// Timestamp for the last time the feed record was changed.
-  google.protobuf.Timestamp updated_at = 4;
+  string updated_at = 4;
   /// Timestamp for last time the feed was checked for new content.
-  google.protobuf.Timestamp refreshed_at = 5;
+  string refreshed_at = 5;
   /// The title of the feed, as read from the feed itself.
   string title = 6;
   /// The URL of the home page of the site this feed is for.

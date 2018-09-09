@@ -48,9 +48,9 @@ class Feed < Sequel::Model(DB[:feeds])
     Courier::Feed.new(
       id: id,
       url: url,
-      refreshed_at: refreshed_at.to_proto,
-      created_at: created_at.to_proto,
-      updated_at: updated_at.to_proto,
+      refreshed_at: refreshed_at ? refreshed_at.getutc.iso8601 : '',
+      created_at: created_at.getutc.iso8601,
+      updated_at: updated_at.getutc.iso8601,
       title: title,
       home_page_url: homepage_url
     ).tap do |feed|
@@ -67,14 +67,5 @@ end
 class NilClass
   def to_proto
     self
-  end
-end
-
-require 'google/protobuf/well_known_types'
-class Time
-  def to_proto
-    timestamp = Google::Protobuf::Timestamp.new
-    timestamp.from_time(self)
-    timestamp
   end
 end

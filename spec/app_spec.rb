@@ -24,9 +24,9 @@ RSpec.describe FeedsHandler, rpc: true do
           {
             id: Integer,
             url: 'https://example.com/feed.json',
-            refreshed_at: nil,
-            created_at: { seconds: Integer, nanos: Integer },
-            updated_at: { seconds: Integer, nanos: Integer },
+            refreshed_at: '',
+            created_at: String,
+            updated_at: String,
             title: '',
             home_page_url: '',
             settings: nil
@@ -34,9 +34,9 @@ RSpec.describe FeedsHandler, rpc: true do
           {
             id: Integer,
             url: 'https://blog.example.com/feed/json',
-            refreshed_at: nil,
-            created_at: { seconds: Integer, nanos: Integer },
-            updated_at: { seconds: Integer, nanos: Integer },
+            refreshed_at: '',
+            created_at: String,
+            updated_at: String,
             title: '',
             home_page_url: '',
             settings: nil
@@ -81,9 +81,9 @@ RSpec.describe FeedsHandler, rpc: true do
           {
             id: Integer,
             url: 'https://example.com/feed.json',
-            refreshed_at: nil,
-            created_at: { seconds: Integer, nanos: Integer },
-            updated_at: { seconds: Integer, nanos: Integer },
+            refreshed_at: '',
+            created_at: String,
+            updated_at: String,
             title: 'My Cool Blog',
             home_page_url: 'https://example.com',
             settings: { autopost: true }
@@ -119,9 +119,9 @@ RSpec.describe FeedsHandler, rpc: true do
         expect(response.to_hash).to match(
           id: Integer,
           url: 'https://example.com/feed.json',
-          refreshed_at: nil,
-          created_at: { seconds: Integer, nanos: Integer },
-          updated_at: { seconds: Integer, nanos: Integer },
+          refreshed_at: '',
+          created_at: String,
+          updated_at: String,
           title: '',
           home_page_url: '',
           settings: { autopost: false }
@@ -198,10 +198,10 @@ RSpec.describe FeedsHandler, rpc: true do
       before { response }
 
       it 'returns a job status message' do
-        expect(response.to_hash).to match({
+        expect(response.to_hash).to match(
           status: 'refreshing',
           job_id: String
-        })
+        )
       end
 
       it 'enqueues a job to refresh the feed' do
@@ -269,14 +269,14 @@ RSpec.describe FeedsHandler, rpc: true do
 
     it 'returns a description of the updated feed' do
       expect(response.to_hash).to match(
-          id: Integer,
-          url: 'https://example.com/feed.json',
-          refreshed_at: nil,
-          created_at: { seconds: Integer, nanos: Integer },
-          updated_at: { seconds: Integer, nanos: Integer },
-          title: '',
-          home_page_url: '',
-          settings: { autopost: true }
+        id: Integer,
+        url: 'https://example.com/feed.json',
+        refreshed_at: '',
+        created_at: String,
+        updated_at: String,
+        title: '',
+        home_page_url: '',
+        settings: { autopost: true }
       )
     end
 
